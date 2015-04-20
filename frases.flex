@@ -14,16 +14,11 @@
 
 %%
 
-"," { resultado+= "COMA"; cantComa++; }
-"(1[0-5]|\d)" { resultado+= "NUM"; canNum++; }
-"(R1[0-5]|R\d)" { resultado+= "REG"; cantReg++; }
-"(\[1[0-5]\]|\[\d\])" { resultado+= "POS"; cantPos++; }
-"\s" { resultado+= "ESPACIO"; cantEsp++; }
-"LOAD" { resultado+= "LOAD"; cantLoad++; }
-"ADD" { resultado+= "ADD"; cantAdd++; }
-"CMP" { resultado+= "CMṔ"; cantCmp++; }
-int|char {System.out.println("TIPO") ;}
-[a-zA-Z]+ {System.out.println("ID") ;}
-";" {System.out.println("PC") ;}
-"."				{ System.out.println("El sujeto de su frase es: "+sujeto ); }
-. { System.out.println("encontré una vara rara q no se q es.. oh oh");}
+"," { resultado+= "COMA"; cantComa++; System.out.println("COMA");}
+"(1[0-5]|\d)" { resultado+= "NUM"; cantNum++; System.out.println("NUM");}
+"(R1[0-5]|R\d)" { resultado+= "REG"; cantReg++; System.out.println("REG");}
+"(\[1[0-5]\]|\[\d\])" { resultado+= "POS"; cantPos++; System.out.println("POS");}
+"\s" { resultado+= "ESPACIO"; cantEsp++; System.out.println("ESPACIO");}
+"LOAD" { resultado+= "LOAD"; cantLoad++; System.out.println("LOAD");}
+"ADD" { resultado+= "ADD"; cantAdd++; System.out.println("ADD");}
+"CMP" { resultado+= "CMP"; cantCmp++; System.out.println("CMP");}
