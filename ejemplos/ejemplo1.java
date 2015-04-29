@@ -1,3 +1,15 @@
+/******************************************************************/
+/* Author: CS307 Course Staff                                     */
+/* Date: February 14, 2005                                        */
+/* Description: Demos constructors, static vs instance methods,   */
+/*              and method overloading.                           */
+/******************************************************************/
+/*s
+
+if(){}
+while(){}
+
+*/
 public class DemoClass
 {
     private int x;
@@ -14,6 +26,10 @@ public class DemoClass
         // use x to refer to a local variable x (more specifically,
         // method parameter x)
         this.x = x;
+        if()else(){}
+        while(){}
+        for(){}
+        do{}while();
     }
 
     public DemoClass(DemoClass otherDemo)
@@ -50,7 +66,7 @@ public class DemoClass
     // call various versions of overload() based on their 
     // list of parameters (aka function signatures)
     public void overloadTester() {
-        System.out.println("overloadTester:\n");
+        System.out.print("overloadTester:\n");
 
         overload((byte)1);
         overload((short)1);

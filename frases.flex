@@ -24,13 +24,13 @@ static class Frecuencias {
     	LISTA_PARAM("Listas Parámetros"),
     	LLAMADO_METODO("Llamados a métodos"),
     	BLOQUE("Bloques"),
-    	TIPOS("Tipos"),
+    	TIPO("Tipos"),
     	IF("Condicionales if"),
     	ELSE("Condicionales else"),
-    	CICLOS("Ciclos"),
-    	ARREGLOS("Arreglos"),
+    	CICLO("Ciclos"),
+    	ARREGLO("Arreglos"),
     	IMPRESION("Impresiones"),
-    	INSTRUCCIONES ("Instrucciones");
+    	INSTRUCCION ("Instrucciones");
 
     	private final String nombre;       
 	    private TipoComponente(String s) {
@@ -48,16 +48,15 @@ static class Frecuencias {
 
     Frecuencias() {
         listaFrecuencias = new EnumMap<TipoComponente, Integer>(TipoComponente.class);
+        for (TipoComponente tc : TipoComponente.values()) {
+            listaFrecuencias.put(tc, 0);
+        }
     }
 
     public void contarComponente(TipoComponente tc){
     	Object valor = listaFrecuencias.get(tc);
-    	if(valor == null){
-    		listaFrecuencias.put(tc, 1);
-    	}else{
-    		int v = (Integer)valor;
-			listaFrecuencias.put(tc, v+1);
-    	}
+		int v = (Integer)valor;
+		listaFrecuencias.put(tc, v+1);
 	}
 
 	public void guardarTabla() throws IOException {
@@ -77,29 +76,28 @@ static class Frecuencias {
 Identificadores
 Listas Parámetros
 Llamados a métodos
-
-Tipos
-Condicionales if
-Condicionales else
-Ciclos
 Arreglos
-Impresiones
 Instrucciones
 */
-
-Decimal     = [0-9]+ 
-Bloque = \{               
-//Octal       = "o"[0-7]+             
-//Hex         = "0x"[0-9|A-F]+        
-//Identifier  = [a-zA-Z][a-zA-Z0-9_]*
-
+Comentario =  (\/\/.*)|(\/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*+\/)
+Bloque = \{
+Else = (else\()|else|else if|(else if \()  
+If = (if\()|if  
+Ciclos = (for\()|(while\()
+Impresion = (System.out.println\()|(System.out.print\()
+Tipo = byte|short|int|long|float|double|boolean|char|String
 %%
 
 // recuerde yyline yycolumn yytext()
-
+{Comentario} {} 
+{Tipo} {f.contarComponente(Frecuencias.TipoComponente.TIPO);} 
 {Bloque} {f.contarComponente(Frecuencias.TipoComponente.BLOQUE);} 
-
+{Else} {f.contarComponente(Frecuencias.TipoComponente.ELSE);}
+{If} {f.contarComponente(Frecuencias.TipoComponente.IF);}
+{Ciclos} {f.contarComponente(Frecuencias.TipoComponente.CICLO);}
+{Impresion} {f.contarComponente(Frecuencias.TipoComponente.IMPRESION);}
+//llamados a metodos
 // genericos
 \r|\n|\r\n|\u2028|\u2029|\u000B|\u000C|\u0085 {}
-<<EOF>>       {f.guardarTabla(); System.exit(0);}  
+<<EOF>>       {f.guardarTabla();System.exit(0);} 
 .         {}                                         
