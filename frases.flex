@@ -1,24 +1,48 @@
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
 
 %%
 
-%public
-%class AnalizadorL
-%standalone
+%class AnalizadorL  
+%unicode                
+%line                   
+%column                 
+%standalone             
 
-%unicode
+
+%init{ 
+this.tokensList = new ArrayList();
+%init}
 
 %{
-	String resultado = "";
-  	int cantComa = 0, cantNum = 0,  cantReg = 0, cantPos = 0, cantEsp = 0, cantLoad = 0, cantAdd = 0, cantCmp = 0;
+
+private ArrayList tokensList; 
+
+private void writeOutputFile() throws IOException { 
+	String filename = "file.out";
+	BufferedWriter out = new BufferedWriter(new FileWriter(filename));
+	for (String s:this.tokensList) {
+		System.out.println(s);
+		out.write(s + "\n");
+	}
+	out.close();
+}
+
 %}
 
+Decimal     = [0-9]+                
+Octal       = "o"[0-7]+             
+Hex         = "0x"[0-9|A-F]+        
+Identifier  = [a-zA-Z][a-zA-Z0-9_]*
+EOF = << EOF >>
 %%
 
-"," { resultado+= "COMA"; cantComa++; System.out.println("COMA");}
-"(1[0-5]|\d)" { resultado+= "NUM"; cantNum++; System.out.println("NUM");}
-"(R1[0-5]|R\d)" { resultado+= "REG"; cantReg++; System.out.println("REG");}
-"(\[1[0-5]\]|\[\d\])" { resultado+= "POS"; cantPos++; System.out.println("POS");}
-"\s" { resultado+= "ESPACIO"; cantEsp++; System.out.println("ESPACIO");}
-"LOAD" { resultado+= "LOAD"; cantLoad++; System.out.println("LOAD");}
-"ADD" { resultado+= "ADD"; cantAdd++; System.out.println("ADD");}
-"CMP" { resultado+= "CMP"; cantCmp++; System.out.println("CMP");}
+{Decimal}       {this.tokensList.add("[" + yyline + "," + yycolumn + "] Decimal: " + yytext());}     
+{Octal}         {this.tokensList.add("[" + yyline + "," + yycolumn + "] Octal: " + yytext());}      
+{Hex}           {this.tokensList.add("[" + yyline + "," + yycolumn + "] Hexadecimal: " + yytext());} 
+{Identifier}    {this.tokensList.add("[" + yyline + "," + yycolumn + "] Identifier: " + yytext());}  
+\r|\n|\r\n|\u2028|\u2029|\u000B|\u000C|\u0085 {}
+EOF       {this.writeOutputFile(); System.exit(0);}  
+.               {}                                         
