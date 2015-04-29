@@ -13,21 +13,16 @@ import java.util.ArrayList;
 
 
 %init{ 
-this.tokensList = new ArrayList();
+
 %init}
 
 %{
 
-private ArrayList tokensList; 
 
 private void writeOutputFile() throws IOException { 
-	String filename = "file.out";
+	/*String filename = "file.out";
 	BufferedWriter out = new BufferedWriter(new FileWriter(filename));
-	for (String s:this.tokensList) {
-		System.out.println(s);
-		out.write(s + "\n");
-	}
-	out.close();
+	imprimir la vara*/
 }
 
 %}
@@ -39,10 +34,10 @@ Identifier  = [a-zA-Z][a-zA-Z0-9_]*
 EOF = << EOF >>
 %%
 
-{Decimal}       {this.tokensList.add("[" + yyline + "," + yycolumn + "] Decimal: " + yytext());}     
-{Octal}         {this.tokensList.add("[" + yyline + "," + yycolumn + "] Octal: " + yytext());}      
-{Hex}           {this.tokensList.add("[" + yyline + "," + yycolumn + "] Hexadecimal: " + yytext());} 
-{Identifier}    {this.tokensList.add("[" + yyline + "," + yycolumn + "] Identifier: " + yytext());}  
+{Decimal}       {System.out.println("[" + yyline + "," + yycolumn + "] Decimal: " + yytext());}     
+{Octal}         {System.out.println("[" + yyline + "," + yycolumn + "] Octal: " + yytext());}      
+{Hex}           {System.out.println("[" + yyline + "," + yycolumn + "] Hexadecimal: " + yytext());} 
+{Identifier}    {System.out.println("[" + yyline + "," + yycolumn + "] Identifier: " + yytext());}  
 \r|\n|\r\n|\u2028|\u2029|\u000B|\u000C|\u0085 {}
 EOF       {this.writeOutputFile(); System.exit(0);}  
 .               {}                                         
