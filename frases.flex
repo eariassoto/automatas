@@ -60,14 +60,16 @@ static class Frecuencias {
 	}
 
 	public void guardarTabla() throws IOException {
-		String nombreArchivo = "tabla.txt"; //usar un timestap aqui
+		String nombreArchivo = "tablas/tabla.txt"; //usar un timestap aqui
 		BufferedWriter out = new BufferedWriter(new FileWriter(nombreArchivo));
 
 		Set<TipoComponente> keySet = listaFrecuencias.keySet();
         for (TipoComponente tc : keySet) {
             int v = listaFrecuencias.get(tc);
             System.out.println(tc.toString()+": "+String.valueOf(v));
+            out.write(tc.toString()+": "+String.valueOf(v)+"\n");
         }
+        out.close();
 	}
 }
 
@@ -76,7 +78,6 @@ static class Frecuencias {
 Identificadores
 Listas Parámetros
 Llamados a métodos
-Arreglos
 Instrucciones
 */
 Comentario =  (\/\/.*)|(\/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*+\/)
@@ -86,11 +87,17 @@ If = (if\()|if
 Ciclos = (for\()|(while\()
 Impresion = (System.out.println\()|(System.out.print\()
 Tipo = byte|short|int|long|float|double|boolean|char|String
+Identificador  = [a-zA-Z][a-zA-Z0-9_]*
+Arreglo = {Tipo}\[\][ ]{Identificador}[ ]?(;|=)
 %%
 
 // recuerde yyline yycolumn yytext()
 {Comentario} {} 
+
 {Tipo} {f.contarComponente(Frecuencias.TipoComponente.TIPO);} 
+{Arreglo} {f.contarComponente(Frecuencias.TipoComponente.ARREGLO);} 
+{Identificador} {f.contarComponente(Frecuencias.TipoComponente.IDENTIFICADOR);}
+
 {Bloque} {f.contarComponente(Frecuencias.TipoComponente.BLOQUE);} 
 {Else} {f.contarComponente(Frecuencias.TipoComponente.ELSE);}
 {If} {f.contarComponente(Frecuencias.TipoComponente.IF);}

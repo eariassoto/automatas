@@ -18,6 +18,8 @@ public class DemoClass
     {
         // assign default value
         x = 0;
+        int[] abc;
+        char[] abc = new char[2];
     }
 
     public DemoClass(int x)
