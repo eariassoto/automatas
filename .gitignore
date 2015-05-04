@@ -1,0 +1,4 @@
+*.class
+Analizador.java
+*.java~
+tablas/*.txt
