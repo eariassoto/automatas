@@ -1,5 +1,6 @@
-Identificadores: 9
-Listas Parámetros: 0
+7 1 0 2 2 0 0 0 2 0 2
+Identificadores: 7
+Listas Parámetros: 1
 Llamados a métodos: 0
 Bloques: 2
 Tipos: 2
@@ -8,4 +9,4 @@ Condicionales else: 0
 Ciclos: 0
 Arreglos: 2
 Impresiones: 0
-Instrucciones: 0
+Instrucciones: 2

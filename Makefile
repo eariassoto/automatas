@@ -1,7 +1,8 @@
 go:
-	java -jar jflex.jar frases.flex
+	clear
+	java -jar jflex.jar reglas.flex
 	javac AnalizadorL.java AnalisisCodigo.java
 	java AnalisisCodigo
 
 compileflex:
-	java -jar jflex.jar frases.flex
+	java -jar jflex.jar reglas.flex
