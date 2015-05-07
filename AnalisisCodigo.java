@@ -9,38 +9,44 @@ import java.io.BufferedReader;
 import java.nio.charset.Charset;
 import java.lang.InterruptedException;
 import java.lang.ProcessBuilder;
+import java.util.HashSet;
+import java.util.Set;
 
 public class AnalisisCodigo{
-	
-	public static void reemplazarArchivo(File fuente, File dest){
-		try{
-			Files.copy(fuente.toPath(), dest.toPath());
-		}catch(IOException ioe){}
-	}
 
-	public static void eliminarArchivosEnFolder(String f){
-		File file = new File(f);
-		for(File i: file.listFiles()) i.delete();
-	}
-
-	public static File[] filtrarArchivosExtension(String folder, String ext){
-		File dir = new File(folder);
-		File[] files = dir.listFiles(new FilenameFilter() {
-		    public boolean accept(File dir, String name) {
-		        return name.toLowerCase().endsWith(ext);
-		    }
-		});
-		return files;
-	}
-
-	public static void main(String args[]){
-
+	public AnalisisCodigo(){
 		File[] archivos = filtrarArchivosExtension("ejemplos", ".java");
 
 		// quito análisis anteriores
 		eliminarArchivosEnFolder("tablas");
 
 		// analisis de todos los .java
+		analizarCodigos(archivos);
+
+		// analizar las tablas
+		String[] res = analizarResultados();
+		int l = res.length;
+
+		// con esto quito tuplas repetidas
+		Set< Pair<String, String> > set = new HashSet< Pair<String, String> >(); 
+
+		// busco resultados similares
+		for(int j = 0; j<l; j++){
+			for(int k = 0; k<l; k++){
+				if(j != k){
+					if(res[j].equals(res[k])){
+						set.add(new Pair<String, String>(archivos[j].getName(), archivos[k].getName()));
+					}
+				}
+			}
+		}
+
+		for(Pair<String, String> p : set){
+			System.out.println("Los archivos " + p.getLeft() + " y " + p.getRight() + " podrian ser copiados.");
+		}
+	}
+	
+	public void analizarCodigos(File[] archivos){
 		for(File f: archivos){
 			try{
 				String[] arg = {"java AnalizadorL ejemplos/"+f.getName()};
@@ -52,11 +58,13 @@ public class AnalisisCodigo{
 			catch(InterruptedException ioe){System.out.println(ioe.getMessage());}
 
 			reemplazarArchivo(new File("tablas/tabla.txt"), new File("tablas/"+f.getName()+".txt"));
+
+			File tablaTemp = new File("tablas/tabla.txt");
+			tablaTemp.delete();
 		}
+	}
 
-		File tablaTemp = new File("tablas/tabla.txt");
-		tablaTemp.delete();
-
+	public String[] analizarResultados(){
 		File[] archivosTablas = filtrarArchivosExtension("tablas", ".txt");
 		int l = archivosTablas.length;
 		String[] resultados = new String[l];
@@ -71,17 +79,33 @@ public class AnalisisCodigo{
 
 			}
 		}
+		return resultados;
+	}
 
-		for(int j = 0; j<l; j++){
-			for(int k = 0; k<l; k++){
-				if(j != k){
-					if(resultados[j].equals(resultados[k])){
-						System.out.println("El archivo " + archivosTablas[j].getName() + " y el archivo " + archivosTablas[k].getName() + "podrian ser copias.");
-					}
-				}
-			}
-		}
+	public void reemplazarArchivo(File fuente, File dest){
+		try{
+			Files.copy(fuente.toPath(), dest.toPath());
+		}catch(IOException ioe){}
+	}
 
+	public void eliminarArchivosEnFolder(String f){
+		File file = new File(f);
+		for(File i: file.listFiles()) i.delete();
+	}
+
+	public File[] filtrarArchivosExtension(String folder, final String e){
+		File dir = new File(folder);
+		File[] files = dir.listFiles(new FilenameFilter() {
+		    public boolean accept(File dir, String name) {
+		        return name.toLowerCase().endsWith(e);
+		    }
+		});
+		return files;
+	}
+
+	public static void main(String args[]){
+
+		AnalisisCodigo a = new AnalisisCodigo();
 
 	}
 

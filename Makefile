@@ -1,7 +1,7 @@
 go:
-	clear
+	cls
 	java -jar jflex.jar reglas.flex
-	javac AnalizadorL.java AnalisisCodigo.java
+	javac Pair.java AnalizadorL.java AnalisisCodigo.java
 	java AnalisisCodigo
 
 compileflex:
