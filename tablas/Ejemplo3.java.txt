@@ -1,0 +1,12 @@
+114 11 16 16 13 4 3 5 0 0 44
+Identificadores: 114
+Listas Parámetros: 11
+Llamados a métodos: 16
+Bloques: 16
+Tipos: 13
+Condicionales if: 4
+Condicionales else: 3
+Ciclos: 5
+Arreglos: 0
+Impresiones: 0
+Instrucciones: 44

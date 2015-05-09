@@ -1,0 +1,12 @@
+175 7 37 27 19 1 0 8 4 16 57
+Identificadores: 175
+Listas Parámetros: 7
+Llamados a métodos: 37
+Bloques: 27
+Tipos: 19
+Condicionales if: 1
+Condicionales else: 0
+Ciclos: 8
+Arreglos: 4
+Impresiones: 16
+Instrucciones: 57

@@ -1,0 +1,12 @@
+32 2 1 5 5 2 0 2 0 0 10
+Identificadores: 32
+Listas Parámetros: 2
+Llamados a métodos: 1
+Bloques: 5
+Tipos: 5
+Condicionales if: 2
+Condicionales else: 0
+Ciclos: 2
+Arreglos: 0
+Impresiones: 0
+Instrucciones: 10

@@ -76,17 +76,12 @@ static class Frecuencias {
 }
 
 %}
-/*
-Identificadores
-Listas Parámetros
-Llamados a métodos
-Instrucciones
-*/
+
 Comentario =  (\/\/.*)|(\/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*+\/)
 Bloque = \{
-Else = (else\{)|(else[ ]if\()  
-If = (if\() 
-Ciclos = (for\()|(while\()
+Else = (else[ ]*\{)|(else[ ]*if\()  
+If = if[ ]*\( 
+Ciclos = (for[ ]*\()|(while[ ]*\()
 Impresion = (System.out.println\()|(System.out.print\()
 Tipo = byte|short|int|long|float|double|boolean|char|String
 Identificador  = [a-zA-Z][a-zA-Z0-9_]*
@@ -94,15 +89,15 @@ Caracter = (\'[a-zA-Z]\') | (\'[0-9]\')
 Hilera = \".*\"
 Numero = [-+]?[0-9]*\.?[0-9]+
 AlgoParaParametro = {Caracter}|{Hilera}|{Numero}|{Identificador}|(true)|(false)
-AlgunParametro = {Tipo}[ ]{Identificador}
+AlgunParametro = {Tipo}[ ]+{Identificador}
 
 LlamadaMetodo =  \.?{Identificador}\(({AlgoParaParametro}(\,)?|(\,?[ ])?)*\)
 DefParametro  =     {Identificador}\(({AlgunParametro}(\,)?|(\,?[ ])?)*\)
 
-Arreglo = {Tipo}\[\][ ]{Identificador}[ ]?(;|=)  
+Arreglo = {Tipo}\[\][ ]+{Identificador}[ ]*(;|=)  
 
-Declaracion = ({Identificador}[ ]?=[ ]?new[ ]?{Identificador})|({Identificador}[ ]?=[ ]?{AlgoParaParametro})
-Comparacion = {AlgoParaParametro}|{Identificador}[ ]?(\<|\>|\=\=|\<\=|\>\=|\!\=)[ ]?{AlgoParaParametro}|{Identificador}
+Declaracion = ({Identificador}[ ]*?=[ ]*new[ ]+{Identificador})|({Identificador}[ ]*=[ ]*{AlgoParaParametro})
+Comparacion = {AlgoParaParametro}|{Identificador}[ ]*(\<|\>|\=\=|\<\=|\>\=|\!\=)[ ]*{AlgoParaParametro}|{Identificador}
 Instruccion = {Declaracion}|{Comparacion}
 %%
 

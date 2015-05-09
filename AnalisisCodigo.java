@@ -17,30 +17,23 @@ public class AnalisisCodigo{
 	public AnalisisCodigo(){
 		File[] archivos = filtrarArchivosExtension("ejemplos", ".java");
 
-		// quito análisis anteriores
+		// quito analisis anteriores
 		eliminarArchivosEnFolder("tablas");
 
 		// analisis de todos los .java
 		analizarCodigos(archivos);
 
-		// analizar las tablas
-		String[] res = analizarResultados();
-		int l = res.length;
+		// recuperar las tablas de resultados
+		File[] archivosTablas = filtrarArchivosExtension("tablas", ".txt");
+		String[] res = analizarResultados(archivosTablas);
 
 		// con esto quito tuplas repetidas
 		Set< Pair<String, String> > set = new HashSet< Pair<String, String> >(); 
 
-		// busco resultados similares
-		for(int j = 0; j<l; j++){
-			for(int k = 0; k<l; k++){
-				if(j != k){
-					if(res[j].equals(res[k])){
-						set.add(new Pair<String, String>(archivos[j].getName(), archivos[k].getName()));
-					}
-				}
-			}
-		}
+		// busco coincidencias y las guardo en el set
+		buscarResultadosIguales(archivosTablas, res, set);
 
+		// imprimo resultados
 		for(Pair<String, String> p : set){
 			System.out.println("Los archivos " + p.getLeft() + " y " + p.getRight() + " podrian ser copiados.");
 		}
@@ -49,10 +42,9 @@ public class AnalisisCodigo{
 	public void analizarCodigos(File[] archivos){
 		for(File f: archivos){
 			try{
-				String[] arg = {"java AnalizadorL ejemplos/"+f.getName()};
 		    	ProcessBuilder pb = new ProcessBuilder("java", "AnalizadorL", "ejemplos/"+f.getName());
 				Process pr = pb.start();
-				pr.waitFor();  // espere a que termine el análisis
+				pr.waitFor();  // espere a que termine el proceso de analisis
 
 			}catch(IOException ioe){System.out.println(ioe.getMessage());}
 			catch(InterruptedException ioe){System.out.println(ioe.getMessage());}
@@ -64,8 +56,8 @@ public class AnalisisCodigo{
 		}
 	}
 
-	public String[] analizarResultados(){
-		File[] archivosTablas = filtrarArchivosExtension("tablas", ".txt");
+	public String[] analizarResultados(File[] f){
+		File[] archivosTablas = f;
 		int l = archivosTablas.length;
 		String[] resultados = new String[l];
 		
@@ -103,10 +95,23 @@ public class AnalisisCodigo{
 		return files;
 	}
 
+	public void buscarResultadosIguales(File[] archivosTablas, String[] res, Set<Pair<String, String>> set){
+		int l = res.length;
+		for(int j = 0; j<l; j++){
+			for(int k = 0; k<l; k++){
+				if(j != k){
+					if(res[j].equals(res[k])){
+						String n1 = archivosTablas[j].getName();
+						String n2 = archivosTablas[k].getName();
+						set.add(new Pair<String, String>(n1.substring(0, n1.length()-4), n2.substring(0, n2.length()-4	)));
+					}
+				}
+			}
+		}
+	}
+
 	public static void main(String args[]){
-
-		AnalisisCodigo a = new AnalisisCodigo();
-
+		new AnalisisCodigo();
 	}
 
 }
