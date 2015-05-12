@@ -7,54 +7,114 @@ import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
 public class Partido{
-	
-	private static final int VISITA = 0;
-	private static final int CASA   = 1;
+
+	public static void main(String[] args){
+		try{
+			// lee el archivo de entrada
+			BufferedReader entrada = new BufferedReader(new FileReader(args[0]));
+
+			// nueva instancia
+			Partido p = new Partido(entrada);
+		}catch(FileNotFoundException fnfe){
+			
+		}
+	}
+
+	// punteros a instancias de los equipos y uno extra que
+	// va a apuntar al equipo que esta bateando
 	private Equipo equipoVisita, equipoCasa, equipoActual;
+
+	// vector que se va a poblar con 4 instancias de Base
 	private Vector<Base> base;
 
 	public Partido(BufferedReader entrada){
+
+		// creo que lo equipos
 		equipoVisita = new Equipo("equipo visitante");
 		equipoCasa   = new Equipo("equipo local");
+		
+		// vista batea primero
 		equipoActual = equipoVisita;
 		
+		// poblo bases
 		base = new Vector<Base>();
 		for(int i = 0; i < 4; i++)
 			base.addElement(new Base());
 
+		// imprimo el mensaje de primera entrada
+		System.out.print(getMensajeEntrada());
+
 		try{
+			// mientras haya lineas, analicela
 			String accion = entrada.readLine();
 			while (accion != null) {
 				analizarJugada(accion);
 				accion = entrada.readLine();
 			}
 
-		}catch(IOException ioe){}
+		}catch(IOException ioe){
+
+		}
 	}
 
-  	private void ponchado(){
-  		equipoActual.sumarOuts(1);
-  		System.out.print("Bateador del " + equipoActual.getNombre() + " ponchado.\n");
-  	}
-
-	private void bolaDetenida(char n, char m){
-		equipoActual.sumarOuts(1);
-		System.out.print("Bola detenida por " + n + ", out producido por " + m + ".\n");
+	private String getMensajeEntrada(){
+		return "Entrada #" + equipoActual.getEntrada() + ". Batea el " + equipoActual.getNombre() + ".\n";
 	}
 
-	private void jugadaDoble(){
-		equipoActual.sumarOuts(2);
-  		System.out.print("Jugada doble.\n");
+	private void sumarEntrada(){
+		equipoVisita.nuevaEntrada();
+		equipoCasa.nuevaEntrada();
 	}
 
-	private void outAtrapada(char n){
-		equipoActual.sumarOuts(1);
-		System.out.print("Out por atrapada de " + n + ".\n");
+	private void nuevaEntrada(){
+		equipoVisita.nuevaEntrada();
+		equipoCasa.nuevaEntrada();
+		if(equipoActual == equipoCasa)
+			equipoActual = equipoVisita;
+		else
+			equipoActual = equipoCasa;
+		System.out.print(getMensajeEntrada());
 	}
 
-	private void outPrimera(){
-		equipoActual.sumarOuts(1);
-		System.out.print("Out pero el jugador avanza a primera.\n");
+	/* jugadas
+	0 ponchado
+	1 bola detenida
+	2 outaptrapada
+	3 outprimera
+	4 sacrificio
+	5 jugada doble
+	*/
+	private void jugadaOut(int opcion, char n, char m){
+		
+		// imprimo mensajes
+		switch(opcion){
+			case 0:
+			System.out.print("Bateador del " + equipoActual.getNombre() + " ponchado.\n");
+			break;
+			case 1:
+			System.out.print("Bola detenida por " + n + ", out producido por " + m + ".\n");
+			break;
+			case 2:
+			System.out.print("Out por atrapada de " + n + ".\n");
+			break;
+			case 3:
+			System.out.print("Out pero el jugador avanza a primera.\n");
+			break;
+			case 4:
+			System.out.print("Sacrificio, los corredores avanzan una base.\n");
+			break;
+			case 5:
+			System.out.print("Jugada doble.\n");
+			break;
+		}
+		if(opcion < 5)
+			equipoActual.sumarOuts(1);
+		else
+			equipoActual.sumarOuts(2); // codigo jugada doble
+
+		if(equipoActual.hayTresOuts()){
+  			nuevaEntrada();
+  		}
 	}
 
 	private void primeraPorError(char n){
@@ -85,12 +145,14 @@ public class Partido{
 		System.out.print("Cuadrangular.\n");
 	}
 
-	private void sacrificio(){
-		equipoActual.sumarOuts(1);
-		System.out.print("Sacrificio, los corredores avanzan una base.\n");
-		
-	}
-
+	/* jugadas
+	0 ponchado
+	1 bola detenida
+	2 outaptrapada
+	3 outprimera
+	4 sacrificio
+	5 jugada doble
+	*/
 	private void analizarJugada(String j){
 		Pattern p;
 		Matcher m;
@@ -99,27 +161,27 @@ public class Partido{
 		p = Pattern.compile("K");
 		m = p.matcher(j);
 		if(m.find()){
-			ponchado();
+			jugadaOut(0, '0', '0');
 		}else{
 			p = Pattern.compile("[1-9][1-9]");
 			m = p.matcher(j);
 			if(m.find()){
-				bolaDetenida(j.charAt(0), j.charAt(1));
+				jugadaOut(1, j.charAt(0), j.charAt(1));
 			}else{
 				p = Pattern.compile("DP");
 				m = p.matcher(j);
 				if(m.find()){
-					jugadaDoble();
+					jugadaOut(5, '0', '0');
 				}else{
 					p = Pattern.compile("L[1-9]");
 					m = p.matcher(j);
 					if(m.find()){
-						outAtrapada(j.charAt(1));
+						jugadaOut(2, j.charAt(1), '0');
 					}else{
 						p = Pattern.compile("FC");
 						m = p.matcher(j);
 						if(m.find()){
-							outPrimera();
+							jugadaOut(3, '0', '0');
 						}else{
 							p = Pattern.compile("E[1-9]");
 							m = p.matcher(j);
@@ -159,7 +221,7 @@ public class Partido{
 														p = Pattern.compile("SAC");
 														m = p.matcher(j);
 														if(m.find()){
-															sacrificio();
+															jugadaOut(4, '0', '0');
 														}
 													}
 												}
@@ -174,54 +236,5 @@ public class Partido{
 			}
 		}
   	}
-
-
-	public static void main(String[] args){
-		try{
-			BufferedReader entrada = new BufferedReader(new FileReader(args[0]));
-			Partido p = new Partido(entrada);
-		}catch(FileNotFoundException fnfe){}
-	}
-
-}
-
-class Equipo{
-
-	private Vector<Integer> entradas;
-	private int outs;
-	private String nombre;
-
-	public Equipo(String n){
-		nombre = n;
-		outs = 0;
-	}
-	
-	void sumarOuts(int o){
-		outs += o;
-	}
-
-	boolean hayTresOuts(){
-		return outs > 2;
-	}
-
-	String getNombre(){
-		return nombre;
-	}
-
-}
-
-class Base{
-
-	private boolean jugadorEnBase;
-	public Base(){
-
-	}
-	
-	public boolean hayJugador(){
-		return jugadorEnBase;
-	}
-	public void ponerJugador(boolean b){
-		jugadorEnBase = b;
-	}
 
 }

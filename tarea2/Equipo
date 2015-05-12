@@ -1,0 +1,41 @@
+import java.util.Vector;
+
+public class Equipo{
+
+	private Vector<Integer> entradas;
+	private int outs;
+	private String nombre;
+
+	public Equipo(String n){
+		nombre = n;
+		outs = 0;
+		entradas = new Vector<Integer>();
+		entradas.addElement(0);
+	}
+
+	public String getEntrada(){
+		return String.valueOf(entradas.size());
+	}
+
+	public void nuevaEntrada(){
+		outs = 0;
+		entradas.addElement(0);
+	}
+
+	public void sumarAnotacion(int i){
+		entradas.setElementAt(entradas.lastElement()+i, entradas.size()-1);
+	}
+	
+	void sumarOuts(int o){
+		outs += o;
+	}
+
+	boolean hayTresOuts(){
+		return outs > 2;
+	}
+
+	String getNombre(){
+		return nombre;
+	}
+
+}
