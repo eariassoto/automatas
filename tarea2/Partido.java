@@ -112,7 +112,7 @@ public class Partido{
 		else
 			equipoActual.sumarOuts(2); // codigo jugada doble
 
-		if(equipoActual.hayTresOuts()){
+		if(equipoActual.hayTresOuts() && equipoActual == equipoVis){
   			nuevaEntrada();
   		}
 	}
