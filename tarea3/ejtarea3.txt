@@ -1,0 +1,8 @@
+class abc{
+	int i = 9;
+	i++;
+	if(a==b){
+	bool b = true;
+	i += 99;
+	}
+}

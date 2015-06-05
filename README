@@ -1,0 +1,11 @@
+para instalar Jison
+
+sudo npm install jison -g
+
+para compilar el programa
+
+jison tarea3.jison
+
+para probar un codigo de ejemplo
+
+node tarea3.js ejtarea3.txt
