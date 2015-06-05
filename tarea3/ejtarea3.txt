@@ -1,8 +1,12 @@
 class abc{
-	int i = 9;
-	i++;
-	if(a==b){
-	bool b = true;
-	i += 99;
+	int i;
+
+
+	public int c(){
+			i++;
+		if(a==b){
+		bool b = true;
+		i += 99;
+		}
 	}
 }

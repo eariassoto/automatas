@@ -11,6 +11,11 @@
 \".*\"                return 'HILERA'
 "true"|"false"        return 'VBOOL'
 
+
+"protected"           return 'PROTECTED'
+"public"              return 'PUBLIC'
+"private"             return 'PRIVATE'
+"void"                return 'VOID'
 "int"                 return 'INT'
 "char"                return 'CHAR'
 "float"               return 'FLOAT'
@@ -56,10 +61,33 @@ expressions
        ;
        
 programa
-       : CLASS ID '{' bloque '}'
+       : CLASS ID '{' bloqueCodigo '}'
        {$$ = "La clase se llama: " + $2 + " y adentro tiene: " + $4+ "\n";}
        ;
-       
+  
+bloqueCodigo 
+       : instruccionCodigo  bloqueCodigo 
+       {$$ = $1 + $2;}
+       ;
+
+bloqueCodigo
+       : %empty
+       {$$="";}
+       ;
+
+instruccionCodigo
+       : definicion | metodo
+        {$$ = $1 ;}
+       ;
+
+metodo
+       : modificador  tipodatMetodo ID '(' ')' '{' bloque '}'
+       {$$ = "\nEl metodo se llama: " + $3 + " y adentro tiene: " + $7+ "\n";}
+       ;
+modificador
+       : PUBLIC | PRIVATE | PROTECTED
+        {$$ = $1 ;}
+       ;
 bloque
        : instruccion bloque
        {$$ = $1 + $2;}
@@ -79,6 +107,11 @@ declaracion
        : tipodat ID '=' valor PC
        {$$ = "\n"+"Variable " + $2 + " de tipo " + $1 + " con el valor: " + $4;}
        ;
+
+definicion
+       : tipodat ID  PC
+       {$$ = "\n"+"Variable " + $2 + " de tipo " + $1;}
+       ;       
        
 asignacion
        : ID operasig valor PC        
@@ -132,6 +165,11 @@ operincdec
        
 tipodat
        : INT | CHAR | BOOL | FLOAT | STRING
+       { $$ = $1; }
+       ;
+
+tipodatMetodo
+       : INT | CHAR | BOOL | FLOAT | STRING | VOID
        { $$ = $1; }
        ;
        
