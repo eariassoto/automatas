@@ -55,125 +55,255 @@
 
 %% /* language grammar */
 
-expressions
-       : programa EOF
-       {console.log($1);return $1;}
-       ;
-       
-programa
-       : CLASS ID '{' bloqueCodigo '}'
-       {$$ = "La clase se llama: " + $2 + " y adentro tiene: " + $4+ "\n";}
-       ;
-  
-bloqueCodigo 
-       : instruccionCodigo  bloqueCodigo 
-       {$$ = $1 + $2;}
+class
+   : CLASS 
+   { $$ = new Nodo("class", true, $1); }
+   ;
+
+id
+   : ID 
+   { $$ = new Nodo("id", true, $1); }
+   ;
+
+pc
+   : PC
+   { $$ = new Nodo("pc", true, $1); }
+   ;
+
+valor
+   : INTN 
+   { $$ = new Nodo("valor", true, $1); }
+   | REALN 
+   { $$ = new Nodo("valor", true, $1); }
+   | CARAC 
+   { $$ = new Nodo("valor", true, $1); }
+   | HILERA 
+   { $$ = new Nodo("valor", true, $1); }
+   | VBOOL
+   { $$ = new Nodo("valor", true, $1); }
+   ;
+
+tipodat
+   : INT 
+   { $$ = new Nodo("tipodat", true, $1); }
+   | CHAR 
+   { $$ = new Nodo("tipodat", true, $1); }
+   | BOOL 
+   { $$ = new Nodo("tipodat", true, $1); }
+   | FLOAT 
+   { $$ = new Nodo("tipodat", true, $1); }
+   | STRING
+   { $$ = new Nodo("tipodat", true, $1); }
+   ;
+
+tipodatMetodo
+   : INT 
+   { $$ = new Nodo("tipodatMetodo", true, $1); }
+   | CHAR 
+   { $$ = new Nodo("tipodatMetodo", true, $1); }
+   | BOOL 
+   { $$ = new Nodo("tipodatMetodo", true, $1); }
+   | FLOAT 
+   { $$ = new Nodo("tipodatMetodo", true, $1); }
+   | STRING 
+   { $$ = new Nodo("tipodatMetodo", true, $1); }
+   | VOID
+   { $$ = new Nodo("tipodatMetodo", true, $1); }
+   ;
+
+operincdec      
+       : '++'
+       { $$ = new Nodo("operincdec", true, $1); }
+       | '--'
+       { $$ = new Nodo("operincdec", true, $1); }
        ;
 
-bloqueCodigo
-       : %empty
-       {$$="";}
-       ;
-
-instruccionCodigo
-       : definicion | metodo
-        {$$ = $1 ;}
-       ;
-
-metodo
-       : modificador  tipodatMetodo ID '(' ')' '{' bloque '}'
-       {$$ = "\nEl metodo se llama: " + $3 + " y adentro tiene: " + $7+ "\n";}
-       ;
-modificador
-       : PUBLIC | PRIVATE | PROTECTED
-        {$$ = $1 ;}
-       ;
-bloque
-       : instruccion bloque
-       {$$ = $1 + $2;}
-       ;
-       
-bloque
-       : %empty
-       {$$="";}
-       ;
-       
-instruccion
-       : asignacion | incdec | declaracion | comp | insif
-        {$$ = $1 ;}
-       ;
-
-declaracion
-       : tipodat ID '=' valor PC
-       {$$ = "\n"+"Variable " + $2 + " de tipo " + $1 + " con el valor: " + $4;}
-       ;
-
-definicion
-       : tipodat ID  PC
-       {$$ = "\n"+"Variable " + $2 + " de tipo " + $1;}
-       ;       
-       
-asignacion
-       : ID operasig valor PC        
-       {$$ = "\n"+"Modificacion de la variable "+$1;}
-       ;
-       
-operasig
-       : '+='|'-='| '*='|'/='
-       {$$ = $1;}
-       ;
-       
-pos       
-       : ID operincdec PC
-       {$$ = "\n"+"Modificacion de la variable "+$1;}
-       ;
-
-pre       
-       : operincdec ID PC
-       {$$ = "\n"+"Modificacion de la variable "+$2;}
-       ;
-
-incdec       
-       : pos | pre
-       {$$ = $1;}
+X
+       : id 
+       { $$ = $1; }
+       | valor
+       { $$ = $1; }
        ;
 
 opercomp       
-       : '=='|'<='| '>='|'!=' | '&&' | '||'
-       {$$ = $1;}
-       ;
+   : '=='
+   { $$ = new Nodo("opercomp", true, $1); }
+   |'<='
+   { $$ = new Nodo("opercomp", true, $1); }
+   | '>='
+   { $$ = new Nodo("opercomp", true, $1); }
+   |'!=' 
+   { $$ = new Nodo("opercomp", true, $1); }
+   | '&&' 
+   { $$ = new Nodo("opercomp", true, $1); }
+   | '||'
+   { $$ = new Nodo("opercomp", true, $1); }
+   ;
 
-insif
-       : IF '(' ID opercomp X ')' '{' bloque '}'
-       {$$ ="\nif que compara " + $3 + " con " + $5 + " y ejecuta "+$8 + "\nfin de if";}
-       ;
+operasig
+   : '+='
+   { $$ = new Nodo("operasig", true, $1); }
+   |'-='
+   { $$ = new Nodo("operasig", true, $1); }
+   | '*='
+   { $$ = new Nodo("operasig", true, $1); }
+   |'/='
+   { $$ = new Nodo("operasig", true, $1); }
+   ;
+
+modificador
+   : PUBLIC 
+   { $$ = new Nodo("modificador", true, $1); }
+   | PRIVATE 
+   { $$ = new Nodo("modificador", true, $1); }
+   | PROTECTED
+   { $$ = new Nodo("modificador", true, $1); }
+   ;
+
+if
+   : IF 
+   { $$ = new Nodo("if", true, $1); }
+   ;
 
 comp    
-       : ID opercomp X PC
-       {$$ = "\n"+"Comparacion de " + $1 + " con " + $3;}
-       ;     
+   : id opercomp X pc
+   { $$ = new Nodo("comp", false); 
+     $$.agregarHijo($1);
+     $$.agregarHijo($2);
+     $$.agregarHijo($3);
+     $$.agregarHijo($4);
+   }
+   ;
 
-X
-       : ID | valor
-       {$$ = $1;}
-       ;
+insif
+   : if '(' id opercomp X ')' '{' bloque '}'
+   { $$ = new Nodo("insif", false); 
+     $$.agregarHijo($1);
+     $$.agregarHijo($3);
+     $$.agregarHijo($4);
+     $$.agregarHijo($5);
+     $$.agregarHijo($8);
+   }
+   ;
 
-operincdec      
-       : '++'| '--'
-       {$$ = $1;}
-       ;
+pos       
+   : id operincdec pc
+   { $$ = new Nodo("pos", false);
+   $$.agregarHijo($1);
+   $$.agregarHijo($2);
+   $$.agregarHijo($3);
+   }
+   ;
+
+pre       
+   : operincdec id pc
+   { $$ = new Nodo("pre", false);
+   $$.agregarHijo($1);
+   $$.agregarHijo($2);
+   $$.agregarHijo($3);
+   }
+   ;
+
+incdec       
+   : pos 
+   { $$ = $1; }
+   | pre
+   { $$ = $1; }
+   ;
+
+asignacion
+   : id operasig valor pc        
+   { $$ = new Nodo("asignacion", false);
+   $$.agregarHijo($1);
+   $$.agregarHijo($2);
+   $$.agregarHijo($3);
+   $$.agregarHijo($4);
+   }
+   ;
+
+definicion
+   : tipodat id pc
+   {$$ = new Nodo("definicion", false);
+   $$.agregarHijo($1);
+   $$.agregarHijo($2);
+   $$.agregarHijo($3);
+   }
+   ; 
+
+declaracion
+   : tipodat id '=' valor pc
+   { $$ = new Nodo("declaracion", false);
+   $$.agregarHijo($1);
+   $$.agregarHijo($2);
+   $$.agregarHijo($4);
+   $$.agregarHijo($5);
+   }
+   ;
+
+instruccion
+   : asignacion | incdec | declaracion | comp | insif
+    { $$ = $1; }
+   ;
+
+bloque
+   : instruccion bloque
+   { 
+       $$ = new Nodo("bloque", false);
+       $$.agregarHijo($1);
+       if($2.nombreGramatica == "bloque"){
+              for(i = 0; i < $2.nHijos; i++) {
+                     $$.agregarHijo($2.hijos[i]);
+              }
+       }
+   }
+   | %empty
+   {$$ = new Nodo("finbloque", false); }
+   ;
+
+
+metodo
+   : modificador tipodatMetodo id '(' ')' '{' bloque '}'
+   { $$ = new Nodo("metodo", false);
+   $$.agregarHijo($1);
+   $$.agregarHijo($2);
+   $$.agregarHijo($3);
+   $$.agregarHijo($7);
+   }
+   ;
+
+instruccionCodigo
+   : definicion | metodo
+    {$$ = $1;}
+   ;
+
+bloqueCodigo 
+   : instruccionCodigo  bloqueCodigo 
+   { $$ = new Nodo("bloqueCodigo", false); 
+   $$.agregarHijo($1);
+   if($2.nombreGramatica == "bloqueCodigo"){
+              for(i = 0; i < $2.nHijos; i++) {
+                     $$.agregarHijo($2.hijos[i]);
+              }
+       }
+   }
+   | %empty
+   { $$ = new Nodo("finbloquecodigo", false); }
+   ;
+   
+programa
+   : class id '{' bloqueCodigo '}'
+   { $$ = new Nodo("programa", false);
+   $$.agregarHijo($1);
+   $$.agregarHijo($2);
+   $$.agregarHijo($4);
+   }
+   ;
        
-tipodat
-       : INT | CHAR | BOOL | FLOAT | STRING
-       { $$ = $1; }
-       ;
-
-tipodatMetodo
-       : INT | CHAR | BOOL | FLOAT | STRING | VOID
-       { $$ = $1; }
-       ;
+expressions
+   : programa EOF
+   {
+       $1.imprimir("");
+       return $1;
+   }
+   ;
        
-valor
-       : INTN | REALN | CARAC | HILERA | VBOOL
-       {$$ = $1;}
-       ;

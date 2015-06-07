@@ -1,12 +1,8 @@
-class abc{
-	int i;
-
-
-	public int c(){
-			i++;
+class claseA{
+	private int metodoA(){
 		if(a==b){
 		bool b = true;
-		i += 99;
 		}
+		abc++;
 	}
 }
