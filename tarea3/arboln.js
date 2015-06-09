@@ -27,7 +27,7 @@ method.imprimir = function(tab) {
   console.log(tab+this.nombreGramatica+aux);
 
   function llamadoRecursivoPorQueLosForAquiApestan(element) {
-    element.imprimir(tab+"\t");
+    element.imprimir(tab+"    ");
   }
   this.hijos.forEach(llamadoRecursivoPorQueLosForAquiApestan);
 
@@ -35,7 +35,7 @@ method.imprimir = function(tab) {
 
 module.exports = Nodo;
 
-
+/*
 var nodo1 = new Nodo("A", false);
 var nodo2 = new Nodo("B", true, "val1");
 var nodo3 = new Nodo("C", true, "val2");
@@ -43,4 +43,4 @@ var nodo3 = new Nodo("C", true, "val2");
 nodo1.agregarHijo(nodo2);
 nodo1.agregarHijo(nodo3);
 nodo1.imprimir("");
-
+*/

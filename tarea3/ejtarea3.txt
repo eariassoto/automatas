@@ -1,8 +1,9 @@
 class claseA{
-	private int metodoA(){
+	char zfgs;
+	private int metodoABC(){
 		if(a==b){
 		bool b = true;
 		}
-		abc++;
+		fff++;
 	}
 }
