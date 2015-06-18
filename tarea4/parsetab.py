@@ -5,9 +5,9 @@ _tabversion = '3.5'
 
 _lr_method = 'LALR'
 
-_lr_signature = '9195A5F7E05E627AC0F404F95AEB41BA'
+_lr_signature = '8368B2A17BA49D6C8BC73100A56A2194'
     
-_lr_action_items = {'NAME':([0,2,5,7,11,12,13,14,],[1,8,8,8,8,8,8,8,]),')':([3,8,9,10,16,17,18,19,20,],[-9,-10,-7,16,-8,-4,-3,-5,-6,]),'(':([0,2,5,7,11,12,13,14,],[5,5,5,5,5,5,5,5,]),'+':([1,3,6,8,9,10,15,16,17,18,19,20,],[-10,-9,12,-10,-7,12,12,-8,-4,-3,-5,-6,]),'*':([1,3,6,8,9,10,15,16,17,18,19,20,],[-10,-9,13,-10,-7,13,13,-8,13,13,-5,-6,]),'-':([0,1,2,3,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,],[2,-10,2,-9,2,11,2,-10,-7,11,2,2,2,2,11,-8,-4,-3,-5,-6,]),'NUMBER':([0,2,5,7,11,12,13,14,],[3,3,3,3,3,3,3,3,]),'/':([1,3,6,8,9,10,15,16,17,18,19,20,],[-10,-9,14,-10,-7,14,14,-8,14,14,-5,-6,]),'=':([1,],[7,]),'$end':([1,3,4,6,8,9,15,16,17,18,19,20,],[-10,-9,0,-2,-10,-7,-1,-8,-4,-3,-5,-6,]),}
+_lr_action_items = {'LOAD':([0,],[1,]),'LOADI':([0,],[2,]),'BB':([0,],[3,]),'SHIFT':([0,],[5,]),'JMP':([0,],[4,]),'NUMBER':([13,14,15,16,19,21,24,],[17,18,19,20,23,25,26,]),'R':([1,2,5,7,8,10,],[-3,-6,-7,15,-4,16,]),'STORE':([0,],[8,]),'[':([3,4,6,11,17,20,],[-11,-10,14,-12,21,24,]),'BEQ':([0,],[11,]),']':([18,25,26,],[22,27,28,]),'STOREI':([0,],[13,]),'$end':([9,12,22,23,27,28,],[0,-1,-9,-5,-8,-2,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -16,7 +16,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'expression':([0,2,5,7,11,12,13,14,],[6,9,10,15,17,18,19,20,]),'statement':([0,],[4,]),}
+_lr_goto_items = {'cod2':([0,],[7,]),'cod4':([0,],[6,]),'expression':([0,],[12,]),'statement':([0,],[9,]),'cod1':([0,],[10,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -26,14 +26,16 @@ for _k, _v in _lr_goto_items.items():
 del _lr_goto_items
 _lr_productions = [
   ("S' -> statement","S'",1,None,None,None),
-  ('statement -> NAME = expression','statement',3,'p_statement_assign','tarea4.py',49),
-  ('statement -> expression','statement',1,'p_statement_expr','tarea4.py',53),
-  ('expression -> expression + expression','expression',3,'p_expression_binop','tarea4.py',57),
-  ('expression -> expression - expression','expression',3,'p_expression_binop','tarea4.py',58),
-  ('expression -> expression * expression','expression',3,'p_expression_binop','tarea4.py',59),
-  ('expression -> expression / expression','expression',3,'p_expression_binop','tarea4.py',60),
-  ('expression -> - expression','expression',2,'p_expression_uminus','tarea4.py',67),
-  ('expression -> ( expression )','expression',3,'p_expression_group','tarea4.py',71),
-  ('expression -> NUMBER','expression',1,'p_expression_number','tarea4.py',75),
-  ('expression -> NAME','expression',1,'p_expression_name','tarea4.py',79),
+  ('statement -> expression','statement',1,'p_statement_expr','tarea4.py',87),
+  ('expression -> cod1 R NUMBER [ NUMBER ]','expression',6,'p_tipo1','tarea4.py',91),
+  ('cod1 -> LOAD','cod1',1,'p_cod1','tarea4.py',95),
+  ('cod1 -> STORE','cod1',1,'p_cod1','tarea4.py',96),
+  ('expression -> cod2 R NUMBER NUMBER','expression',4,'p_tipo2','tarea4.py',103),
+  ('cod2 -> LOADI','cod2',1,'p_cod2','tarea4.py',107),
+  ('cod2 -> SHIFT','cod2',1,'p_cod2','tarea4.py',108),
+  ('expression -> STOREI NUMBER [ NUMBER ]','expression',5,'p_tipo3','tarea4.py',115),
+  ('expression -> cod4 [ NUMBER ]','expression',4,'p_tipo4','tarea4.py',119),
+  ('cod4 -> JMP','cod4',1,'p_cod4','tarea4.py',123),
+  ('cod4 -> BB','cod4',1,'p_cod4','tarea4.py',124),
+  ('cod4 -> BEQ','cod4',1,'p_cod4','tarea4.py',125),
 ]

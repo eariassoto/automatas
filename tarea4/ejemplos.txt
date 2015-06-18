@@ -1,0 +1,4 @@
+LOAD R4 [2]
+SHIFT R3 11
+STOREI 9 [4]
+BEQ [12]

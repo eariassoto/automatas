@@ -1,35 +1,64 @@
 Created by PLY version 3.6 (http://www.dabeaz.com/ply)
 
+Unused terminals:
+
+    SUB
+    CMP
+    XOR
+    ADD
+    AND
+    NAME
+    NOOP
+    NOT
+    OR
+
 Grammar
 
 Rule 0     S' -> statement
-Rule 1     statement -> NAME = expression
-Rule 2     statement -> expression
-Rule 3     expression -> expression + expression
-Rule 4     expression -> expression - expression
-Rule 5     expression -> expression * expression
-Rule 6     expression -> expression / expression
-Rule 7     expression -> - expression
-Rule 8     expression -> ( expression )
-Rule 9     expression -> NUMBER
-Rule 10    expression -> NAME
+Rule 1     statement -> expression
+Rule 2     expression -> cod1 R NUMBER [ NUMBER ]
+Rule 3     cod1 -> LOAD
+Rule 4     cod1 -> STORE
+Rule 5     expression -> cod2 R NUMBER NUMBER
+Rule 6     cod2 -> LOADI
+Rule 7     cod2 -> SHIFT
+Rule 8     expression -> STOREI NUMBER [ NUMBER ]
+Rule 9     expression -> cod4 [ NUMBER ]
+Rule 10    cod4 -> JMP
+Rule 11    cod4 -> BB
+Rule 12    cod4 -> BEQ
 
 Terminals, with rules where they appear
 
-(                    : 8
-)                    : 8
-*                    : 5
-+                    : 3
--                    : 4 7
-/                    : 6
-=                    : 1
-NAME                 : 1 10
-NUMBER               : 9
+ADD                  : 
+AND                  : 
+BB                   : 11
+BEQ                  : 12
+CMP                  : 
+JMP                  : 10
+LOAD                 : 3
+LOADI                : 6
+NAME                 : 
+NOOP                 : 
+NOT                  : 
+NUMBER               : 2 2 5 5 8 8 9
+OR                   : 
+R                    : 2 5
+SHIFT                : 7
+STORE                : 4
+STOREI               : 8
+SUB                  : 
+XOR                  : 
+[                    : 2 8 9
+]                    : 2 8 9
 error                : 
 
 Nonterminals, with rules where they appear
 
-expression           : 1 2 3 3 4 4 5 5 6 6 7 8
+cod1                 : 2
+cod2                 : 5
+cod4                 : 9
+expression           : 1
 statement            : 0
 
 Parsing method: LALR
@@ -37,359 +66,225 @@ Parsing method: LALR
 state 0
 
     (0) S' -> . statement
-    (1) statement -> . NAME = expression
-    (2) statement -> . expression
-    (3) expression -> . expression + expression
-    (4) expression -> . expression - expression
-    (5) expression -> . expression * expression
-    (6) expression -> . expression / expression
-    (7) expression -> . - expression
-    (8) expression -> . ( expression )
-    (9) expression -> . NUMBER
-    (10) expression -> . NAME
+    (1) statement -> . expression
+    (2) expression -> . cod1 R NUMBER [ NUMBER ]
+    (5) expression -> . cod2 R NUMBER NUMBER
+    (8) expression -> . STOREI NUMBER [ NUMBER ]
+    (9) expression -> . cod4 [ NUMBER ]
+    (3) cod1 -> . LOAD
+    (4) cod1 -> . STORE
+    (6) cod2 -> . LOADI
+    (7) cod2 -> . SHIFT
+    (10) cod4 -> . JMP
+    (11) cod4 -> . BB
+    (12) cod4 -> . BEQ
 
-    NAME            shift and go to state 1
-    -               shift and go to state 2
-    (               shift and go to state 5
-    NUMBER          shift and go to state 3
+    STOREI          shift and go to state 13
+    LOAD            shift and go to state 1
+    STORE           shift and go to state 8
+    LOADI           shift and go to state 2
+    SHIFT           shift and go to state 5
+    JMP             shift and go to state 4
+    BB              shift and go to state 3
+    BEQ             shift and go to state 11
 
-    expression                     shift and go to state 6
-    statement                      shift and go to state 4
+    cod2                           shift and go to state 7
+    cod4                           shift and go to state 6
+    expression                     shift and go to state 12
+    statement                      shift and go to state 9
+    cod1                           shift and go to state 10
 
 state 1
 
-    (1) statement -> NAME . = expression
-    (10) expression -> NAME .
+    (3) cod1 -> LOAD .
 
-    =               shift and go to state 7
-    +               reduce using rule 10 (expression -> NAME .)
-    -               reduce using rule 10 (expression -> NAME .)
-    *               reduce using rule 10 (expression -> NAME .)
-    /               reduce using rule 10 (expression -> NAME .)
-    $end            reduce using rule 10 (expression -> NAME .)
+    R               reduce using rule 3 (cod1 -> LOAD .)
 
 
 state 2
 
-    (7) expression -> - . expression
-    (3) expression -> . expression + expression
-    (4) expression -> . expression - expression
-    (5) expression -> . expression * expression
-    (6) expression -> . expression / expression
-    (7) expression -> . - expression
-    (8) expression -> . ( expression )
-    (9) expression -> . NUMBER
-    (10) expression -> . NAME
+    (6) cod2 -> LOADI .
 
-    -               shift and go to state 2
-    (               shift and go to state 5
-    NUMBER          shift and go to state 3
-    NAME            shift and go to state 8
+    R               reduce using rule 6 (cod2 -> LOADI .)
 
-    expression                     shift and go to state 9
 
 state 3
 
-    (9) expression -> NUMBER .
+    (11) cod4 -> BB .
 
-    +               reduce using rule 9 (expression -> NUMBER .)
-    -               reduce using rule 9 (expression -> NUMBER .)
-    *               reduce using rule 9 (expression -> NUMBER .)
-    /               reduce using rule 9 (expression -> NUMBER .)
-    $end            reduce using rule 9 (expression -> NUMBER .)
-    )               reduce using rule 9 (expression -> NUMBER .)
+    [               reduce using rule 11 (cod4 -> BB .)
 
 
 state 4
+
+    (10) cod4 -> JMP .
+
+    [               reduce using rule 10 (cod4 -> JMP .)
+
+
+state 5
+
+    (7) cod2 -> SHIFT .
+
+    R               reduce using rule 7 (cod2 -> SHIFT .)
+
+
+state 6
+
+    (9) expression -> cod4 . [ NUMBER ]
+
+    [               shift and go to state 14
+
+
+state 7
+
+    (5) expression -> cod2 . R NUMBER NUMBER
+
+    R               shift and go to state 15
+
+
+state 8
+
+    (4) cod1 -> STORE .
+
+    R               reduce using rule 4 (cod1 -> STORE .)
+
+
+state 9
 
     (0) S' -> statement .
 
 
 
-state 5
-
-    (8) expression -> ( . expression )
-    (3) expression -> . expression + expression
-    (4) expression -> . expression - expression
-    (5) expression -> . expression * expression
-    (6) expression -> . expression / expression
-    (7) expression -> . - expression
-    (8) expression -> . ( expression )
-    (9) expression -> . NUMBER
-    (10) expression -> . NAME
-
-    -               shift and go to state 2
-    (               shift and go to state 5
-    NUMBER          shift and go to state 3
-    NAME            shift and go to state 8
-
-    expression                     shift and go to state 10
-
-state 6
-
-    (2) statement -> expression .
-    (3) expression -> expression . + expression
-    (4) expression -> expression . - expression
-    (5) expression -> expression . * expression
-    (6) expression -> expression . / expression
-
-    $end            reduce using rule 2 (statement -> expression .)
-    +               shift and go to state 12
-    -               shift and go to state 11
-    *               shift and go to state 13
-    /               shift and go to state 14
-
-
-state 7
-
-    (1) statement -> NAME = . expression
-    (3) expression -> . expression + expression
-    (4) expression -> . expression - expression
-    (5) expression -> . expression * expression
-    (6) expression -> . expression / expression
-    (7) expression -> . - expression
-    (8) expression -> . ( expression )
-    (9) expression -> . NUMBER
-    (10) expression -> . NAME
-
-    -               shift and go to state 2
-    (               shift and go to state 5
-    NUMBER          shift and go to state 3
-    NAME            shift and go to state 8
-
-    expression                     shift and go to state 15
-
-state 8
-
-    (10) expression -> NAME .
-
-    +               reduce using rule 10 (expression -> NAME .)
-    -               reduce using rule 10 (expression -> NAME .)
-    *               reduce using rule 10 (expression -> NAME .)
-    /               reduce using rule 10 (expression -> NAME .)
-    $end            reduce using rule 10 (expression -> NAME .)
-    )               reduce using rule 10 (expression -> NAME .)
-
-
-state 9
-
-    (7) expression -> - expression .
-    (3) expression -> expression . + expression
-    (4) expression -> expression . - expression
-    (5) expression -> expression . * expression
-    (6) expression -> expression . / expression
-
-    +               reduce using rule 7 (expression -> - expression .)
-    -               reduce using rule 7 (expression -> - expression .)
-    *               reduce using rule 7 (expression -> - expression .)
-    /               reduce using rule 7 (expression -> - expression .)
-    $end            reduce using rule 7 (expression -> - expression .)
-    )               reduce using rule 7 (expression -> - expression .)
-
-  ! +               [ shift and go to state 12 ]
-  ! -               [ shift and go to state 11 ]
-  ! *               [ shift and go to state 13 ]
-  ! /               [ shift and go to state 14 ]
-
-
 state 10
 
-    (8) expression -> ( expression . )
-    (3) expression -> expression . + expression
-    (4) expression -> expression . - expression
-    (5) expression -> expression . * expression
-    (6) expression -> expression . / expression
+    (2) expression -> cod1 . R NUMBER [ NUMBER ]
 
-    )               shift and go to state 16
-    +               shift and go to state 12
-    -               shift and go to state 11
-    *               shift and go to state 13
-    /               shift and go to state 14
+    R               shift and go to state 16
 
 
 state 11
 
-    (4) expression -> expression - . expression
-    (3) expression -> . expression + expression
-    (4) expression -> . expression - expression
-    (5) expression -> . expression * expression
-    (6) expression -> . expression / expression
-    (7) expression -> . - expression
-    (8) expression -> . ( expression )
-    (9) expression -> . NUMBER
-    (10) expression -> . NAME
+    (12) cod4 -> BEQ .
 
-    -               shift and go to state 2
-    (               shift and go to state 5
-    NUMBER          shift and go to state 3
-    NAME            shift and go to state 8
+    [               reduce using rule 12 (cod4 -> BEQ .)
 
-    expression                     shift and go to state 17
 
 state 12
 
-    (3) expression -> expression + . expression
-    (3) expression -> . expression + expression
-    (4) expression -> . expression - expression
-    (5) expression -> . expression * expression
-    (6) expression -> . expression / expression
-    (7) expression -> . - expression
-    (8) expression -> . ( expression )
-    (9) expression -> . NUMBER
-    (10) expression -> . NAME
+    (1) statement -> expression .
 
-    -               shift and go to state 2
-    (               shift and go to state 5
-    NUMBER          shift and go to state 3
-    NAME            shift and go to state 8
+    $end            reduce using rule 1 (statement -> expression .)
 
-    expression                     shift and go to state 18
 
 state 13
 
-    (5) expression -> expression * . expression
-    (3) expression -> . expression + expression
-    (4) expression -> . expression - expression
-    (5) expression -> . expression * expression
-    (6) expression -> . expression / expression
-    (7) expression -> . - expression
-    (8) expression -> . ( expression )
-    (9) expression -> . NUMBER
-    (10) expression -> . NAME
+    (8) expression -> STOREI . NUMBER [ NUMBER ]
 
-    -               shift and go to state 2
-    (               shift and go to state 5
-    NUMBER          shift and go to state 3
-    NAME            shift and go to state 8
+    NUMBER          shift and go to state 17
 
-    expression                     shift and go to state 19
 
 state 14
 
-    (6) expression -> expression / . expression
-    (3) expression -> . expression + expression
-    (4) expression -> . expression - expression
-    (5) expression -> . expression * expression
-    (6) expression -> . expression / expression
-    (7) expression -> . - expression
-    (8) expression -> . ( expression )
-    (9) expression -> . NUMBER
-    (10) expression -> . NAME
+    (9) expression -> cod4 [ . NUMBER ]
 
-    -               shift and go to state 2
-    (               shift and go to state 5
-    NUMBER          shift and go to state 3
-    NAME            shift and go to state 8
+    NUMBER          shift and go to state 18
 
-    expression                     shift and go to state 20
 
 state 15
 
-    (1) statement -> NAME = expression .
-    (3) expression -> expression . + expression
-    (4) expression -> expression . - expression
-    (5) expression -> expression . * expression
-    (6) expression -> expression . / expression
+    (5) expression -> cod2 R . NUMBER NUMBER
 
-    $end            reduce using rule 1 (statement -> NAME = expression .)
-    +               shift and go to state 12
-    -               shift and go to state 11
-    *               shift and go to state 13
-    /               shift and go to state 14
+    NUMBER          shift and go to state 19
 
 
 state 16
 
-    (8) expression -> ( expression ) .
+    (2) expression -> cod1 R . NUMBER [ NUMBER ]
 
-    +               reduce using rule 8 (expression -> ( expression ) .)
-    -               reduce using rule 8 (expression -> ( expression ) .)
-    *               reduce using rule 8 (expression -> ( expression ) .)
-    /               reduce using rule 8 (expression -> ( expression ) .)
-    $end            reduce using rule 8 (expression -> ( expression ) .)
-    )               reduce using rule 8 (expression -> ( expression ) .)
+    NUMBER          shift and go to state 20
 
 
 state 17
 
-    (4) expression -> expression - expression .
-    (3) expression -> expression . + expression
-    (4) expression -> expression . - expression
-    (5) expression -> expression . * expression
-    (6) expression -> expression . / expression
+    (8) expression -> STOREI NUMBER . [ NUMBER ]
 
-    +               reduce using rule 4 (expression -> expression - expression .)
-    -               reduce using rule 4 (expression -> expression - expression .)
-    $end            reduce using rule 4 (expression -> expression - expression .)
-    )               reduce using rule 4 (expression -> expression - expression .)
-    *               shift and go to state 13
-    /               shift and go to state 14
-
-  ! *               [ reduce using rule 4 (expression -> expression - expression .) ]
-  ! /               [ reduce using rule 4 (expression -> expression - expression .) ]
-  ! +               [ shift and go to state 12 ]
-  ! -               [ shift and go to state 11 ]
+    [               shift and go to state 21
 
 
 state 18
 
-    (3) expression -> expression + expression .
-    (3) expression -> expression . + expression
-    (4) expression -> expression . - expression
-    (5) expression -> expression . * expression
-    (6) expression -> expression . / expression
+    (9) expression -> cod4 [ NUMBER . ]
 
-    +               reduce using rule 3 (expression -> expression + expression .)
-    -               reduce using rule 3 (expression -> expression + expression .)
-    $end            reduce using rule 3 (expression -> expression + expression .)
-    )               reduce using rule 3 (expression -> expression + expression .)
-    *               shift and go to state 13
-    /               shift and go to state 14
-
-  ! *               [ reduce using rule 3 (expression -> expression + expression .) ]
-  ! /               [ reduce using rule 3 (expression -> expression + expression .) ]
-  ! +               [ shift and go to state 12 ]
-  ! -               [ shift and go to state 11 ]
+    ]               shift and go to state 22
 
 
 state 19
 
-    (5) expression -> expression * expression .
-    (3) expression -> expression . + expression
-    (4) expression -> expression . - expression
-    (5) expression -> expression . * expression
-    (6) expression -> expression . / expression
+    (5) expression -> cod2 R NUMBER . NUMBER
 
-    +               reduce using rule 5 (expression -> expression * expression .)
-    -               reduce using rule 5 (expression -> expression * expression .)
-    *               reduce using rule 5 (expression -> expression * expression .)
-    /               reduce using rule 5 (expression -> expression * expression .)
-    $end            reduce using rule 5 (expression -> expression * expression .)
-    )               reduce using rule 5 (expression -> expression * expression .)
-
-  ! +               [ shift and go to state 12 ]
-  ! -               [ shift and go to state 11 ]
-  ! *               [ shift and go to state 13 ]
-  ! /               [ shift and go to state 14 ]
+    NUMBER          shift and go to state 23
 
 
 state 20
 
-    (6) expression -> expression / expression .
-    (3) expression -> expression . + expression
-    (4) expression -> expression . - expression
-    (5) expression -> expression . * expression
-    (6) expression -> expression . / expression
+    (2) expression -> cod1 R NUMBER . [ NUMBER ]
 
-    +               reduce using rule 6 (expression -> expression / expression .)
-    -               reduce using rule 6 (expression -> expression / expression .)
-    *               reduce using rule 6 (expression -> expression / expression .)
-    /               reduce using rule 6 (expression -> expression / expression .)
-    $end            reduce using rule 6 (expression -> expression / expression .)
-    )               reduce using rule 6 (expression -> expression / expression .)
+    [               shift and go to state 24
 
-  ! +               [ shift and go to state 12 ]
-  ! -               [ shift and go to state 11 ]
-  ! *               [ shift and go to state 13 ]
-  ! /               [ shift and go to state 14 ]
+
+state 21
+
+    (8) expression -> STOREI NUMBER [ . NUMBER ]
+
+    NUMBER          shift and go to state 25
+
+
+state 22
+
+    (9) expression -> cod4 [ NUMBER ] .
+
+    $end            reduce using rule 9 (expression -> cod4 [ NUMBER ] .)
+
+
+state 23
+
+    (5) expression -> cod2 R NUMBER NUMBER .
+
+    $end            reduce using rule 5 (expression -> cod2 R NUMBER NUMBER .)
+
+
+state 24
+
+    (2) expression -> cod1 R NUMBER [ . NUMBER ]
+
+    NUMBER          shift and go to state 26
+
+
+state 25
+
+    (8) expression -> STOREI NUMBER [ NUMBER . ]
+
+    ]               shift and go to state 27
+
+
+state 26
+
+    (2) expression -> cod1 R NUMBER [ NUMBER . ]
+
+    ]               shift and go to state 28
+
+
+state 27
+
+    (8) expression -> STOREI NUMBER [ NUMBER ] .
+
+    $end            reduce using rule 8 (expression -> STOREI NUMBER [ NUMBER ] .)
+
+
+state 28
+
+    (2) expression -> cod1 R NUMBER [ NUMBER ] .
+
+    $end            reduce using rule 2 (expression -> cod1 R NUMBER [ NUMBER ] .)
 
