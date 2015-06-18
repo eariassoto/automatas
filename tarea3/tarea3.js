@@ -193,7 +193,9 @@ case 54:
    this.$.agregarHijo($$[$0-7]);
    this.$.agregarHijo($$[$0-6]);
    this.$.agregarHijo($$[$0-5]);
-   this.$.agregarHijo($$[$0-1]);
+   if($$[$0-1].nombreGramatica == "bloque"){
+      this.$.agregarHijo($$[$0-1]);
+   }
    
 break;
 case 56:
@@ -216,7 +218,9 @@ case 59:
  this.$ = new Nodo("programa", false);
    this.$.agregarHijo($$[$0-4]);
    this.$.agregarHijo($$[$0-3]);
-   this.$.agregarHijo($$[$0-1]);
+   if($$[$0-1].nombreGramatica == "bloqueCodigo"){
+      this.$.agregarHijo($$[$0-1]);
+   }
    
 break;
 case 60:

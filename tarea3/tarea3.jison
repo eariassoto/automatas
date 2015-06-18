@@ -251,7 +251,7 @@ bloque
        $$ = new Nodo("bloque", false);
        $$.agregarHijo($1);
        if($2.nombreGramatica == "bloque"){
-              for(i = 0; i < $2.nHijos; i++) {
+              for(var i = 0; i < $2.nHijos; i++) {
                      $$.agregarHijo($2.hijos[i]);
               }
        }
@@ -267,7 +267,9 @@ metodo
    $$.agregarHijo($1);
    $$.agregarHijo($2);
    $$.agregarHijo($3);
-   $$.agregarHijo($7);
+   if($7.nombreGramatica == "bloque"){
+      $$.agregarHijo($7);
+   }
    }
    ;
 
@@ -281,7 +283,7 @@ bloqueCodigo
    { $$ = new Nodo("bloqueCodigo", false); 
    $$.agregarHijo($1);
    if($2.nombreGramatica == "bloqueCodigo"){
-              for(i = 0; i < $2.nHijos; i++) {
+              for(var i = 0; i < $2.nHijos; i++) {
                      $$.agregarHijo($2.hijos[i]);
               }
        }
@@ -295,7 +297,9 @@ programa
    { $$ = new Nodo("programa", false);
    $$.agregarHijo($1);
    $$.agregarHijo($2);
-   $$.agregarHijo($4);
+   if($4.nombreGramatica == "bloqueCodigo"){
+      $$.agregarHijo($4);
+   }
    }
    ;
        
