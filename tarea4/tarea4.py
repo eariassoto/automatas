@@ -1,4 +1,7 @@
 import ply.lex as lex
+import ply.yacc as yacc
+import sys
+import datetime
 
 reserved = { 
 'NOOP':'NOOP', 
@@ -77,11 +80,6 @@ def t_error(t):
 
 # Build the lexer
 lexer = lex.lex()  
-
-import ply.yacc as yacc
-import sys
-
-names = {}
   
 def p_statement_expr(p): 
     'statement : expression' 
@@ -130,6 +128,38 @@ def p_cod4(p):
     else:
         p[0] = '0111'
 
+def p_tipo5(p):
+    "expression : CMP  R NUMBER R NUMBER" 
+    p[0] = '1111' + p[3] + p[5] + '0000'
+
+
+def p_tipo6(p):
+    "expression : NOT  R NUMBER R NUMBER" 
+    p[0] = '1111' + p[3] + '0000' + p[5] 
+
+def p_tipo7(p):
+    "expression : cod5  R NUMBER R NUMBER R NUMBER" 
+    p[0] = p[1] + p[3] + p[5] + p[7] 
+
+def p_cod5(p):
+    '''cod5 : AND
+            | OR 
+            | XOR
+            | ADD
+            | SUB '''
+    if(p[1] == 'AND'):
+        p[0] = '1000';
+    elif(p[1] == 'OR'):
+        p[0] = '1001'
+    elif(p[1] == 'XOR'):
+        p[0] = '1010'
+    elif(p[1] == 'ADD'):
+        p[0] = '1100'
+    else:
+        p[0] = '1101'
+
+
+
 # Error rule for syntax errors
 def p_error(p):
     print "Syntax error in input!"
@@ -137,18 +167,25 @@ def p_error(p):
 # Build the parser
 parser = yacc.yacc()
 
-if len(sys.argv) == 1:
-    while True:
-        try:
-            s = raw_input('> ')
-        except EOFError:
-            break
-        if not s: continue
-        result = parser.parse(s)
-        print result
-elif sys.argv[1] == "-f":
-    f = open(sys.argv[2], "r")
-    s = f.readlines()
-    for line in s:
-        result = parser.parse(line)
-        print result 
+if sys.argv[1] == "-c":
+    time = datetime.datetime.now()
+    ms = time.microsecond
+    nombreArchivo = str(ms) + '.txt'
+
+    try:
+        file = open(nombreArchivo,'w+')   # Trying to create a new file or open one
+        
+        inputFile = open(sys.argv[2], "r")
+        s = inputFile.readlines()
+        for line in s:
+            result = parser.parse(line)
+            file.write(result+'\n');
+            print result 
+
+        file.close()
+
+    except:
+        print('Something went wrong! Can\'t tell what?')
+        sys.exit(0)
+
+    

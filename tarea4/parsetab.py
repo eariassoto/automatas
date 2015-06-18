@@ -5,9 +5,9 @@ _tabversion = '3.5'
 
 _lr_method = 'LALR'
 
-_lr_signature = '8368B2A17BA49D6C8BC73100A56A2194'
+_lr_signature = '5E1B57147F94FA4E13B7B2B2F3DD2A66'
     
-_lr_action_items = {'LOAD':([0,],[1,]),'LOADI':([0,],[2,]),'BB':([0,],[3,]),'SHIFT':([0,],[5,]),'JMP':([0,],[4,]),'NUMBER':([13,14,15,16,19,21,24,],[17,18,19,20,23,25,26,]),'R':([1,2,5,7,8,10,],[-3,-6,-7,15,-4,16,]),'STORE':([0,],[8,]),'[':([3,4,6,11,17,20,],[-11,-10,14,-12,21,24,]),'BEQ':([0,],[11,]),']':([18,25,26,],[22,27,28,]),'STOREI':([0,],[13,]),'$end':([9,12,22,23,27,28,],[0,-1,-9,-5,-8,-2,]),}
+_lr_action_items = {'LOAD':([0,],[10,]),'LOADI':([0,],[1,]),'XOR':([0,],[11,]),'SUB':([0,],[2,]),'BB':([0,],[3,]),'SHIFT':([0,],[4,]),'JMP':([0,],[8,]),'$end':([9,20,38,40,43,44,47,49,50,],[0,-1,-9,-5,-8,-13,-14,-2,-15,]),'AND':([0,],[17,]),'NUMBER':([6,23,24,25,26,27,28,29,33,37,39,41,42,48,],[22,30,31,32,33,34,35,36,40,44,45,46,47,50,]),'ADD':([0,],[18,]),'R':([1,2,4,7,10,11,13,14,15,16,17,18,19,21,30,32,35,45,],[-6,-20,-7,23,-3,-18,25,26,27,-4,-16,-19,28,-17,37,39,42,48,]),'STORE':([0,],[16,]),'NOT':([0,],[19,]),'[':([3,5,8,12,22,34,],[-11,-12,-10,24,29,41,]),'BEQ':([0,],[5,]),']':([31,36,46,],[38,43,49,]),'OR':([0,],[21,]),'STOREI':([0,],[6,]),'CMP':([0,],[7,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -16,7 +16,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'cod2':([0,],[7,]),'cod4':([0,],[6,]),'expression':([0,],[12,]),'statement':([0,],[9,]),'cod1':([0,],[10,]),}
+_lr_goto_items = {'cod4':([0,],[12,]),'cod5':([0,],[13,]),'cod2':([0,],[14,]),'statement':([0,],[9,]),'cod1':([0,],[15,]),'expression':([0,],[20,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -38,4 +38,12 @@ _lr_productions = [
   ('cod4 -> JMP','cod4',1,'p_cod4','tarea4.py',123),
   ('cod4 -> BB','cod4',1,'p_cod4','tarea4.py',124),
   ('cod4 -> BEQ','cod4',1,'p_cod4','tarea4.py',125),
+  ('expression -> CMP R NUMBER R NUMBER','expression',5,'p_tipo5','tarea4.py',134),
+  ('expression -> NOT R NUMBER R NUMBER','expression',5,'p_tipo6','tarea4.py',139),
+  ('expression -> cod5 R NUMBER R NUMBER R NUMBER','expression',7,'p_tipo7','tarea4.py',143),
+  ('cod5 -> AND','cod5',1,'p_cod5','tarea4.py',147),
+  ('cod5 -> OR','cod5',1,'p_cod5','tarea4.py',148),
+  ('cod5 -> XOR','cod5',1,'p_cod5','tarea4.py',149),
+  ('cod5 -> ADD','cod5',1,'p_cod5','tarea4.py',150),
+  ('cod5 -> SUB','cod5',1,'p_cod5','tarea4.py',151),
 ]

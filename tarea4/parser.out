@@ -2,15 +2,8 @@ Created by PLY version 3.6 (http://www.dabeaz.com/ply)
 
 Unused terminals:
 
-    SUB
-    CMP
-    XOR
-    ADD
-    AND
     NAME
     NOOP
-    NOT
-    OR
 
 Grammar
 
@@ -27,28 +20,36 @@ Rule 9     expression -> cod4 [ NUMBER ]
 Rule 10    cod4 -> JMP
 Rule 11    cod4 -> BB
 Rule 12    cod4 -> BEQ
+Rule 13    expression -> CMP R NUMBER R NUMBER
+Rule 14    expression -> NOT R NUMBER R NUMBER
+Rule 15    expression -> cod5 R NUMBER R NUMBER R NUMBER
+Rule 16    cod5 -> AND
+Rule 17    cod5 -> OR
+Rule 18    cod5 -> XOR
+Rule 19    cod5 -> ADD
+Rule 20    cod5 -> SUB
 
 Terminals, with rules where they appear
 
-ADD                  : 
-AND                  : 
+ADD                  : 19
+AND                  : 16
 BB                   : 11
 BEQ                  : 12
-CMP                  : 
+CMP                  : 13
 JMP                  : 10
 LOAD                 : 3
 LOADI                : 6
 NAME                 : 
 NOOP                 : 
-NOT                  : 
-NUMBER               : 2 2 5 5 8 8 9
-OR                   : 
-R                    : 2 5
+NOT                  : 14
+NUMBER               : 2 2 5 5 8 8 9 13 13 14 14 15 15 15
+OR                   : 17
+R                    : 2 5 13 13 14 14 15 15 15
 SHIFT                : 7
 STORE                : 4
 STOREI               : 8
-SUB                  : 
-XOR                  : 
+SUB                  : 20
+XOR                  : 18
 [                    : 2 8 9
 ]                    : 2 8 9
 error                : 
@@ -58,6 +59,7 @@ Nonterminals, with rules where they appear
 cod1                 : 2
 cod2                 : 5
 cod4                 : 9
+cod5                 : 15
 expression           : 1
 statement            : 0
 
@@ -71,6 +73,9 @@ state 0
     (5) expression -> . cod2 R NUMBER NUMBER
     (8) expression -> . STOREI NUMBER [ NUMBER ]
     (9) expression -> . cod4 [ NUMBER ]
+    (13) expression -> . CMP R NUMBER R NUMBER
+    (14) expression -> . NOT R NUMBER R NUMBER
+    (15) expression -> . cod5 R NUMBER R NUMBER R NUMBER
     (3) cod1 -> . LOAD
     (4) cod1 -> . STORE
     (6) cod2 -> . LOADI
@@ -78,34 +83,47 @@ state 0
     (10) cod4 -> . JMP
     (11) cod4 -> . BB
     (12) cod4 -> . BEQ
+    (16) cod5 -> . AND
+    (17) cod5 -> . OR
+    (18) cod5 -> . XOR
+    (19) cod5 -> . ADD
+    (20) cod5 -> . SUB
 
-    STOREI          shift and go to state 13
-    LOAD            shift and go to state 1
-    STORE           shift and go to state 8
-    LOADI           shift and go to state 2
-    SHIFT           shift and go to state 5
-    JMP             shift and go to state 4
+    STOREI          shift and go to state 6
+    CMP             shift and go to state 7
+    NOT             shift and go to state 19
+    LOAD            shift and go to state 10
+    STORE           shift and go to state 16
+    LOADI           shift and go to state 1
+    SHIFT           shift and go to state 4
+    JMP             shift and go to state 8
     BB              shift and go to state 3
-    BEQ             shift and go to state 11
+    BEQ             shift and go to state 5
+    AND             shift and go to state 17
+    OR              shift and go to state 21
+    XOR             shift and go to state 11
+    ADD             shift and go to state 18
+    SUB             shift and go to state 2
 
-    cod2                           shift and go to state 7
-    cod4                           shift and go to state 6
-    expression                     shift and go to state 12
+    cod4                           shift and go to state 12
+    cod5                           shift and go to state 13
+    cod2                           shift and go to state 14
     statement                      shift and go to state 9
-    cod1                           shift and go to state 10
+    cod1                           shift and go to state 15
+    expression                     shift and go to state 20
 
 state 1
-
-    (3) cod1 -> LOAD .
-
-    R               reduce using rule 3 (cod1 -> LOAD .)
-
-
-state 2
 
     (6) cod2 -> LOADI .
 
     R               reduce using rule 6 (cod2 -> LOADI .)
+
+
+state 2
+
+    (20) cod5 -> SUB .
+
+    R               reduce using rule 20 (cod5 -> SUB .)
 
 
 state 3
@@ -117,37 +135,37 @@ state 3
 
 state 4
 
-    (10) cod4 -> JMP .
-
-    [               reduce using rule 10 (cod4 -> JMP .)
-
-
-state 5
-
     (7) cod2 -> SHIFT .
 
     R               reduce using rule 7 (cod2 -> SHIFT .)
 
 
+state 5
+
+    (12) cod4 -> BEQ .
+
+    [               reduce using rule 12 (cod4 -> BEQ .)
+
+
 state 6
 
-    (9) expression -> cod4 . [ NUMBER ]
+    (8) expression -> STOREI . NUMBER [ NUMBER ]
 
-    [               shift and go to state 14
+    NUMBER          shift and go to state 22
 
 
 state 7
 
-    (5) expression -> cod2 . R NUMBER NUMBER
+    (13) expression -> CMP . R NUMBER R NUMBER
 
-    R               shift and go to state 15
+    R               shift and go to state 23
 
 
 state 8
 
-    (4) cod1 -> STORE .
+    (10) cod4 -> JMP .
 
-    R               reduce using rule 4 (cod1 -> STORE .)
+    [               reduce using rule 10 (cod4 -> JMP .)
 
 
 state 9
@@ -158,133 +176,287 @@ state 9
 
 state 10
 
-    (2) expression -> cod1 . R NUMBER [ NUMBER ]
+    (3) cod1 -> LOAD .
 
-    R               shift and go to state 16
+    R               reduce using rule 3 (cod1 -> LOAD .)
 
 
 state 11
 
-    (12) cod4 -> BEQ .
+    (18) cod5 -> XOR .
 
-    [               reduce using rule 12 (cod4 -> BEQ .)
+    R               reduce using rule 18 (cod5 -> XOR .)
 
 
 state 12
+
+    (9) expression -> cod4 . [ NUMBER ]
+
+    [               shift and go to state 24
+
+
+state 13
+
+    (15) expression -> cod5 . R NUMBER R NUMBER R NUMBER
+
+    R               shift and go to state 25
+
+
+state 14
+
+    (5) expression -> cod2 . R NUMBER NUMBER
+
+    R               shift and go to state 26
+
+
+state 15
+
+    (2) expression -> cod1 . R NUMBER [ NUMBER ]
+
+    R               shift and go to state 27
+
+
+state 16
+
+    (4) cod1 -> STORE .
+
+    R               reduce using rule 4 (cod1 -> STORE .)
+
+
+state 17
+
+    (16) cod5 -> AND .
+
+    R               reduce using rule 16 (cod5 -> AND .)
+
+
+state 18
+
+    (19) cod5 -> ADD .
+
+    R               reduce using rule 19 (cod5 -> ADD .)
+
+
+state 19
+
+    (14) expression -> NOT . R NUMBER R NUMBER
+
+    R               shift and go to state 28
+
+
+state 20
 
     (1) statement -> expression .
 
     $end            reduce using rule 1 (statement -> expression .)
 
 
-state 13
-
-    (8) expression -> STOREI . NUMBER [ NUMBER ]
-
-    NUMBER          shift and go to state 17
-
-
-state 14
-
-    (9) expression -> cod4 [ . NUMBER ]
-
-    NUMBER          shift and go to state 18
-
-
-state 15
-
-    (5) expression -> cod2 R . NUMBER NUMBER
-
-    NUMBER          shift and go to state 19
-
-
-state 16
-
-    (2) expression -> cod1 R . NUMBER [ NUMBER ]
-
-    NUMBER          shift and go to state 20
-
-
-state 17
-
-    (8) expression -> STOREI NUMBER . [ NUMBER ]
-
-    [               shift and go to state 21
-
-
-state 18
-
-    (9) expression -> cod4 [ NUMBER . ]
-
-    ]               shift and go to state 22
-
-
-state 19
-
-    (5) expression -> cod2 R NUMBER . NUMBER
-
-    NUMBER          shift and go to state 23
-
-
-state 20
-
-    (2) expression -> cod1 R NUMBER . [ NUMBER ]
-
-    [               shift and go to state 24
-
-
 state 21
 
-    (8) expression -> STOREI NUMBER [ . NUMBER ]
+    (17) cod5 -> OR .
 
-    NUMBER          shift and go to state 25
+    R               reduce using rule 17 (cod5 -> OR .)
 
 
 state 22
+
+    (8) expression -> STOREI NUMBER . [ NUMBER ]
+
+    [               shift and go to state 29
+
+
+state 23
+
+    (13) expression -> CMP R . NUMBER R NUMBER
+
+    NUMBER          shift and go to state 30
+
+
+state 24
+
+    (9) expression -> cod4 [ . NUMBER ]
+
+    NUMBER          shift and go to state 31
+
+
+state 25
+
+    (15) expression -> cod5 R . NUMBER R NUMBER R NUMBER
+
+    NUMBER          shift and go to state 32
+
+
+state 26
+
+    (5) expression -> cod2 R . NUMBER NUMBER
+
+    NUMBER          shift and go to state 33
+
+
+state 27
+
+    (2) expression -> cod1 R . NUMBER [ NUMBER ]
+
+    NUMBER          shift and go to state 34
+
+
+state 28
+
+    (14) expression -> NOT R . NUMBER R NUMBER
+
+    NUMBER          shift and go to state 35
+
+
+state 29
+
+    (8) expression -> STOREI NUMBER [ . NUMBER ]
+
+    NUMBER          shift and go to state 36
+
+
+state 30
+
+    (13) expression -> CMP R NUMBER . R NUMBER
+
+    R               shift and go to state 37
+
+
+state 31
+
+    (9) expression -> cod4 [ NUMBER . ]
+
+    ]               shift and go to state 38
+
+
+state 32
+
+    (15) expression -> cod5 R NUMBER . R NUMBER R NUMBER
+
+    R               shift and go to state 39
+
+
+state 33
+
+    (5) expression -> cod2 R NUMBER . NUMBER
+
+    NUMBER          shift and go to state 40
+
+
+state 34
+
+    (2) expression -> cod1 R NUMBER . [ NUMBER ]
+
+    [               shift and go to state 41
+
+
+state 35
+
+    (14) expression -> NOT R NUMBER . R NUMBER
+
+    R               shift and go to state 42
+
+
+state 36
+
+    (8) expression -> STOREI NUMBER [ NUMBER . ]
+
+    ]               shift and go to state 43
+
+
+state 37
+
+    (13) expression -> CMP R NUMBER R . NUMBER
+
+    NUMBER          shift and go to state 44
+
+
+state 38
 
     (9) expression -> cod4 [ NUMBER ] .
 
     $end            reduce using rule 9 (expression -> cod4 [ NUMBER ] .)
 
 
-state 23
+state 39
+
+    (15) expression -> cod5 R NUMBER R . NUMBER R NUMBER
+
+    NUMBER          shift and go to state 45
+
+
+state 40
 
     (5) expression -> cod2 R NUMBER NUMBER .
 
     $end            reduce using rule 5 (expression -> cod2 R NUMBER NUMBER .)
 
 
-state 24
+state 41
 
     (2) expression -> cod1 R NUMBER [ . NUMBER ]
 
-    NUMBER          shift and go to state 26
+    NUMBER          shift and go to state 46
 
 
-state 25
+state 42
 
-    (8) expression -> STOREI NUMBER [ NUMBER . ]
+    (14) expression -> NOT R NUMBER R . NUMBER
 
-    ]               shift and go to state 27
-
-
-state 26
-
-    (2) expression -> cod1 R NUMBER [ NUMBER . ]
-
-    ]               shift and go to state 28
+    NUMBER          shift and go to state 47
 
 
-state 27
+state 43
 
     (8) expression -> STOREI NUMBER [ NUMBER ] .
 
     $end            reduce using rule 8 (expression -> STOREI NUMBER [ NUMBER ] .)
 
 
-state 28
+state 44
+
+    (13) expression -> CMP R NUMBER R NUMBER .
+
+    $end            reduce using rule 13 (expression -> CMP R NUMBER R NUMBER .)
+
+
+state 45
+
+    (15) expression -> cod5 R NUMBER R NUMBER . R NUMBER
+
+    R               shift and go to state 48
+
+
+state 46
+
+    (2) expression -> cod1 R NUMBER [ NUMBER . ]
+
+    ]               shift and go to state 49
+
+
+state 47
+
+    (14) expression -> NOT R NUMBER R NUMBER .
+
+    $end            reduce using rule 14 (expression -> NOT R NUMBER R NUMBER .)
+
+
+state 48
+
+    (15) expression -> cod5 R NUMBER R NUMBER R . NUMBER
+
+    NUMBER          shift and go to state 50
+
+
+state 49
 
     (2) expression -> cod1 R NUMBER [ NUMBER ] .
 
     $end            reduce using rule 2 (expression -> cod1 R NUMBER [ NUMBER ] .)
+
+
+state 50
+
+    (15) expression -> cod5 R NUMBER R NUMBER R NUMBER .
+
+    $end            reduce using rule 15 (expression -> cod5 R NUMBER R NUMBER R NUMBER .)
 

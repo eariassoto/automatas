@@ -1,3 +1,3 @@
 go:
 	clear
-	python tarea4.py -f ejemplos.txt
+	python tarea4.py -c ejemplos.txt
