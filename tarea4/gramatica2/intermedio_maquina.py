@@ -4,7 +4,6 @@ import sys
 import datetime
 
 reserved = { 
-'NOOP':'NOOP', 
 'LOAD':'LOAD', 
 'STORE':'STORE', 
 'LOADI':'LOADI',
@@ -30,7 +29,7 @@ tokens = [
 ] + list(reserved.values())
 
 
-literals = ['[',']']
+literals = ['[',']',',']
 
 def t_NAME(t):
     r'[a-zA-Z_][a-zA-Z_]*'
@@ -86,8 +85,8 @@ def p_statement_expr(p):
     p[0] = p[1] 
 
 def p_tipo1(p):
-    "expression : cod1 R NUMBER '[' NUMBER ']'"
-    p[0] = p[1] + p[3] + '0000' + p[5]
+    "expression : cod1 R NUMBER ',' '[' NUMBER ']'"
+    p[0] = p[1] + p[3] + '0000' + p[6]
 
 def p_cod1(p):
     '''cod1 : LOAD
@@ -98,8 +97,8 @@ def p_cod1(p):
         p[0] = '0010'
 
 def p_tipo2(p):
-    "expression : cod2 R NUMBER NUMBER"
-    p[0] = p[1] + p[3] + p[4] + '0000'
+    "expression : cod2 R NUMBER ',' NUMBER"
+    p[0] = p[1] + p[3] + p[5] + '0000'
 
 def p_cod2(p):
     '''cod2 : LOADI
@@ -110,12 +109,16 @@ def p_cod2(p):
         p[0] = '1110'
 
 def p_tipo3(p):
-    "expression : STOREI NUMBER '[' NUMBER ']'"
-    p[0] = '0100' + '0000' + p[2] + p[4] 
+    "expression : STOREI R NUMBER ',' '[' NUMBER ']'"
+    p[0] = '0100' + '0000' + p[3] + p[6] 
+
+def p_tipo3_1(p):
+    "expression : STOREI R NUMBER ',' NUMBER"
+    p[0] = '0100' + '0000' + p[3] + p[5] 
 
 def p_tipo4(p):
-    "expression : cod4 '[' NUMBER ']'"
-    p[0] = p[1] + '00000000' + p[3]
+    "expression : cod4 NUMBER"
+    p[0] = p[1] + '00000000' + p[2]
 
 def p_cod4(p):
     '''cod4 : JMP
@@ -129,17 +132,17 @@ def p_cod4(p):
         p[0] = '0111'
 
 def p_tipo5(p):
-    "expression : CMP  R NUMBER R NUMBER" 
-    p[0] = '1111' + p[3] + p[5] + '0000'
+    "expression : CMP  R NUMBER ',' R NUMBER" 
+    p[0] = '1111' + p[3] + p[6] + '0000'
 
 
 def p_tipo6(p):
-    "expression : NOT  R NUMBER R NUMBER" 
-    p[0] = '1111' + p[3] + '0000' + p[5] 
+    "expression : NOT  R NUMBER ',' R NUMBER" 
+    p[0] = '1111' + p[3] + '0000' + p[6] 
 
 def p_tipo7(p):
-    "expression : cod5  R NUMBER R NUMBER R NUMBER" 
-    p[0] = p[1] + p[3] + p[5] + p[7] 
+    "expression : cod5  R NUMBER ',' R NUMBER ',' R NUMBER" 
+    p[0] = p[1] + p[3] + p[6] + p[9] 
 
 def p_cod5(p):
     '''cod5 : AND
@@ -168,24 +171,23 @@ def p_error(p):
 parser = yacc.yacc()
 
 if sys.argv[1] == "-c":
-    time = datetime.datetime.now()
-    ms = time.microsecond
-    nombreArchivo = str(ms) + '.txt'
+    nombreArchivo = 'maquina.code'
 
-    try:
-        file = open(nombreArchivo,'w+')   # Trying to create a new file or open one
-        
-        inputFile = open(sys.argv[2], "r")
-        s = inputFile.readlines()
-        for line in s:
-            result = parser.parse(line)
+    #try:
+    file = open(nombreArchivo,'w+')   # Trying to create a new file or open one
+    
+    inputFile = open(sys.argv[2], "r")
+    s = inputFile.readlines()
+    for line in s:
+        result = parser.parse(line)
+        if result is not None:
             file.write(result+'\n');
             print result 
 
-        file.close()
+    file.close()
 
-    except:
-        print('Something went wrong! Can\'t tell what?')
-        sys.exit(0)
+    #except:
+     #   print('Something went wrong! Can\'t tell what?')
+      #  sys.exit(0)
 
     
